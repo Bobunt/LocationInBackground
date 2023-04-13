@@ -3,6 +3,7 @@ package com.example.locationinbackground
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.locationinbackground.main.mainFragment
+import com.example.locationinbackground.main.mapFragment
 
 object Router {
     private fun showFragment(currentFragment: Fragment, fm: FragmentManager?, container: Int, addToBackStack: Boolean = true) {
@@ -27,8 +28,18 @@ object Router {
     private fun showInFragmentMainFragent(fragment: Fragment, fm: FragmentManager?, addToBackStack: Boolean = true){
         showFragment(fragment, fm, R.id.mainFragment, addToBackStack)
     }
+
+    private fun showMap(fragment: Fragment, fm: FragmentManager?, addToBackStack: Boolean = true) {
+        showFragment(fragment, fm, R.id.mainFragment, addToBackStack)
+    }
+
     fun showMainFragmentMain(fm: FragmentManager?){
         clearBackStack(fm)
         showInFragmentMainFragent(mainFragment(), fm, addToBackStack = false)
+    }
+
+    fun showMainFragmentMap(fm: FragmentManager?){
+        clearBackStack(fm)
+        showMap(mapFragment(), fm, addToBackStack = false)
     }
 }

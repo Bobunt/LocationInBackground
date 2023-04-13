@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.locationinbackground.R
+import com.example.locationinbackground.Router
 import com.example.locationinbackground.data.DataBase
 import com.example.locationinbackground.databinding.FragmentMainBinding
 import com.example.locationinbackground.service.LocationService
@@ -32,6 +33,9 @@ class mainFragment : Fragment() {
         }
         binding.buttonStop.setOnClickListener{
             requireActivity().stopService(Intent(context, LocationService::class.java))
+        }
+        binding.buttonMap.setOnClickListener{
+            Router.showMainFragmentMap(activity?.supportFragmentManager)
         }
     }
 }
