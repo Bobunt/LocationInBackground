@@ -14,6 +14,6 @@ interface PointMapDao {
     @Delete
     suspend fun deleteItem(item: PointMap)
 
-//    @Query("SELECT * FROM Item")
-//    fun getItem(): Flow<List<PointMap>>
+    @Query("SELECT * FROM PointMap")
+    fun getItem(): Flow<List<PointMap>>
 }

@@ -10,7 +10,6 @@ import android.os.IBinder
 import android.os.Handler
 import android.util.Log
 import android.location.LocationManager
-import com.example.locationinbackground.DataApplication
 import com.example.locationinbackground.data.DataBase
 import com.example.locationinbackground.data.PointMap
 import kotlinx.coroutines.CoroutineScope

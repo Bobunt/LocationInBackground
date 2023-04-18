@@ -27,7 +27,6 @@ class mainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val database = DataBase.getDatabase(view.context)
         binding.buttonStart.setOnClickListener{
             requireActivity().startService(Intent(view.context, LocationService::class.java))
         }

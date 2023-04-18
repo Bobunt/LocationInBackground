@@ -1,63 +1,72 @@
 package com.example.locationinbackground.main
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.locationinbackground.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.map
+import com.example.locationinbackground.LocationViewModel
+import com.example.locationinbackground.LocationViewModelFactory
+import com.example.locationinbackground.databinding.FragmentMapBinding
+import com.example.locationinbackground.service.LocationApplication
 
 
 class mapFragment : Fragment() {
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: LocationViewModel by activityViewModels{
+        LocationViewModelFactory(
+            (activity?.application as LocationApplication).database.pointMapDao()
+        )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+
+        val bitmap = Bitmap.createBitmap(710, 1200, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.color = Color.RED
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 5F
+        paint.isAntiAlias = true
+
+        var startX = 35
+        var startY = 0
+        var stopX = 0
+        var stopY = 0
+        var falag = true
+
+        viewModel.allPoints.observeForever { listPoint ->
+            for(i in 0..listPoint.size-2 ){
+                startX = 60 + (((listPoint[i].latitude.toDouble() * 1000000) % 10000)/100).toInt()
+                startY = 60 + (((listPoint[i].location.toDouble() * 1000000) % 10000)/100).toInt()
+                stopX = 60 + (((listPoint[i+1].latitude.toDouble() * 1000000) % 10000)/100).toInt()
+                stopY = 60 + (((listPoint[i+1].location.toDouble() * 1000000) % 10000)/100).toInt()
+                canvas.drawLine(
+                    startX.toFloat(),
+                    startY.toFloat(),
+                    stopX.toFloat(),
+                    stopY.toFloat(),
+                    paint
+                )
+                startX = stopX
+                startY = stopY
+            }
+        }
+        binding.imageV.setImageBitmap(bitmap)
+
+        return binding.root
     }
 
-    internal class DrawView(context: Context?) : View(context) {
-        var p: Paint
-        var rect: Rect
-        override fun onDraw(canvas: Canvas) {
-            // заливка канвы цветом
-            canvas.drawARGB(80, 102, 204, 255)
-
-            // настройка кисти
-            // красный цвет
-            p.color = Color.RED
-            // толщина линии = 10
-            p.strokeWidth = 10f
-
-            // рисуем точку (50,50)
-            canvas.drawPoint(50f, 50f, p)
-
-            // рисуем линию от (100,100) до (500,50)
-            canvas.drawLine(100f, 100f, 500f, 50f, p)
-
-            // рисуем круг с центром в (100,200), радиус = 50
-            canvas.drawCircle(100f, 200f, 50f, p)
-
-            // рисуем прямоугольник
-            // левая верхняя точка (200,150), нижняя правая (400,200)
-            canvas.drawRect(200f, 150f, 400f, 200f, p)
-
-            // настройка объекта Rect
-            // левая верхняя точка (250,300), нижняя правая (350,500)
-            rect.set(250, 300, 350, 500)
-            // рисуем прямоугольник из объекта rect
-            canvas.drawRect(rect, p)
-        }
-
-        init {
-            p = Paint()
-            rect = Rect()
-        }
-    }
 }
