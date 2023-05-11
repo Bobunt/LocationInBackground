@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PointMapDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertItem(item: PointMap)
+    suspend fun insertItem(item: List<PointMap>)
 
     @Update
     suspend fun updateItem(item: PointMap)

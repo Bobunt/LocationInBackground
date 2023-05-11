@@ -28,7 +28,7 @@ class mainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonStart.setOnClickListener{
-            requireActivity().startService(Intent(view.context, LocationService::class.java))
+            requireActivity().startForegroundService(Intent(view.context, LocationService::class.java))
         }
         binding.buttonStop.setOnClickListener{
             requireActivity().stopService(Intent(context, LocationService::class.java))
